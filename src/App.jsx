@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Setting from './pages/Setting'
 import PaymentDesk from './pages/PaymentDesk'
 import Cart from './pages/Cart'
+import WebSocketTest from './pages/WebSocketTest';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/setting" element={<Setting/>}></Route>
           <Route path="/payment-desk" element={<PaymentDesk/>}></Route>
           <Route path="/cart" element={<Cart/>}></Route>
+          <Route path="/web-socket-test" element={<WebSocketTest/>}></Route>
         </Routes>
       </Router>
     </div>

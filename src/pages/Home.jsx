@@ -9,6 +9,7 @@ const Home = () => {
                 <li><Link to="/setting">초기세팅 페이지로</Link></li>
                 <li><Link to="/payment-desk">계산대 페이지로</Link></li>
                 <li><Link to="/cart">카트 페이지로</Link></li>
+                <li><Link to="/web-socket-test">웹 소켓 테스트</Link></li>
             </ul>
         </div>
     );

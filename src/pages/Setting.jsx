@@ -9,7 +9,9 @@ const Setting = () => {
   const fetchProducts = async () => {
     try {
       const response = await fetch(
-        "http://192.168.170.240:8080/api/cart/productList",
+        "http://192.168.170.240:8080/api/cart/productList"
+        // "http://192.168.0.3:8080/api/cart/productList"
+        ,
         {
           method: "GET",
           headers: {
@@ -33,7 +35,10 @@ const Setting = () => {
 
   const handleSetting = async () => {
     try {
-      const res = await fetch("http://192.168.170.240:8080/api/setting/", {
+      const res = await fetch(
+        "http://192.168.170.240:8080/api/setting/"
+        // "http://192.168.0.3:8080/api/setting/"
+        , {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +62,13 @@ const Setting = () => {
   // 컴포넌트가 마운트될 때 상품 목록을 가져옴
   useEffect(() => {
     fetchProducts();
-  }, [products]);
+
+    const interval = setInterval(() => {
+      fetchProducts();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>

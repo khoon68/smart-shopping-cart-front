@@ -202,7 +202,6 @@ const Cart = () => {
       } // 클린업
     }
   }, [isStart]);
-
   const sendBarcode = async (barcodeId) => {
     try {
       const response = await fetch(

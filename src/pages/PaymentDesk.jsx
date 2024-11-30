@@ -8,6 +8,31 @@ const PaymentDesk = () => {
     });
     const [loading, setLoading] = useState(true);
 
+    const payCartItemList = async (orderId) => {
+        try {
+            const response = await fetch(
+                `http://192.168.170.240:8080/api/paymentDesk/payment/${orderId}`
+                ,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.ok) {
+                alert("결제 완료!");
+                console.log("결제 완료!");
+            } else {
+                alert("결제 시도 중 실패!");
+                console.log("결제 시도 중 실패!");
+            }
+        } catch (error) {
+            alert(`에러 발생: ${error}`);
+            console.log(`에러 발생: ${error}`);
+        }
+    }
+
     useEffect(() => {
         const clientId = "4bafc367";
         const ws = new WebSocket(`ws://192.168.170.240:8080/ws/rfid?clientId=${clientId}`);
@@ -76,6 +101,14 @@ const PaymentDesk = () => {
                     </div>
                 </>
             )}
+            <div>
+                <button 
+                style={{
+                    "background": "red"
+                }}
+                onClick={() => payCartItemList(paymentRecipt.orderId)}
+                >확인</button>
+            </div>
         </div>
     );
 };

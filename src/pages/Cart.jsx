@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const Cart = () => {
   const [isStart, setIsStart] = useState(false);
@@ -7,7 +7,18 @@ const Cart = () => {
   const [cartItem, setCartItem] = useState({});
   const [product, setProduct] = useState({});
   const [productList, setProductList] = useState([]);
+  const [isWaiting, setIsWaiting] = useState(false);
   const inputRef = useRef(null); // input 요소 참조
+  const wsCart = useRef(null);
+
+  const resetCart = () => {
+    setBarcode("");
+    setCartItemList([]);
+    setCartItem({});
+    setProduct({});
+    setProductList([]);
+    setIsWaiting(false);
+  };
 
   const getItemMaxQuantity = (itemId) => {
     const result = productList.find((product) => product.id === itemId);
@@ -82,6 +93,7 @@ const Cart = () => {
       const res = await fetch(
         "http://192.168.170.240:8080/api/cart/purchase"
         // "http://192.168.0.3:8080/api/cart/purchase"
+        
         , {
         method: "POST",
         headers: {
@@ -94,8 +106,43 @@ const Cart = () => {
 
       const resData = await res.json();
       console.log(`결제 성공! ${resData}`);
+      setIsWaiting(true);
     } catch (error) {
       console.log(`요청 전 에러! ${error}`);
+    }
+  }
+
+  const maintainFocus = () => {
+    if (inputRef.current && document.activeElement !== inputRef.current) {
+      inputRef.current.focus(); // 포커스 유지
+    }
+  };
+
+  const loadProductList = async () => {
+    try {
+      const response = await fetch(
+        `http://192.168.170.240:8080/api/cart/productList`
+        // `http://192.168.0.3:8080/api/cart/productList`
+        ,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if(response.ok) {
+        const data = await response.json();
+        setProductList(data.data);
+        console.log(`제품 리스트 전송 성공: ${productList}`);
+      } else {
+        alert(`제품 리스트 전송 실패: ${response.statusText}`);
+        console.log(`제품 리스트 전송 실패: ${response.statusText}`);
+      }
+    } catch (error) {
+      alert(`제품 리스트 전송 에러 발생: ${error}`);
+      console.error("제품 리스트 전송 에러 발생:", error);
     }
   }
 
@@ -159,49 +206,32 @@ const Cart = () => {
 
   useEffect(() => {
     if(isStart) {
-      const maintainFocus = () => {
-        if (inputRef.current && document.activeElement !== inputRef.current) {
-          inputRef.current.focus(); // 포커스 유지
+      loadProductList();
+      maintainFocus();
+      // const loadProductListInterval = setInterval(loadProductList, 3000 * 1000);
+      const focusInterval = setInterval(maintainFocus, 100); // 주기적으로 확인
+
+      wsCart.current = new WebSocket(`ws://192.168.170.240:8080/ws/shopping?clientId=CLIENT_CART`);
+      wsCart.current.onopen = () => console.log("WebSocket 연결 성공");
+      wsCart.current.onmessage = (e) => {
+        const message = JSON.parse(e.data);
+        if (message.status === "completed") {
+          alert("결제가 완료되었습니다.");
+          resetCart();
         }
       };
 
-      const loadProductList = async () => {
-        try {
-          const response = await fetch(
-            `http://192.168.170.240:8080/api/cart/productList`
-            // `http://192.168.0.3:8080/api/cart/productList`
-            ,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-      
-          if(response.ok) {
-            const data = await response.json();
-            setProductList(data.data);
-            console.log(`제품 리스트 전송 성공: ${productList}`);
-          } else {
-            alert(`제품 리스트 전송 실패: ${response.statusText}`);
-            console.log(`제품 리스트 전송 실패: ${response.statusText}`);
-          }
-        } catch (error) {
-          alert(`제품 리스트 전송 에러 발생: ${error}`);
-          console.error("제품 리스트 전송 에러 발생:", error);
-        }
-      }
-      loadProductList();
-      maintainFocus();
-      const loadProductListInterval = setInterval(loadProductList, 3000 * 1000);
-      const focusInterval = setInterval(maintainFocus, 100); // 주기적으로 확인
+      wsCart.current.onclose = () => console.log("WebSocket 연결 종료");
+      wsCart.current.onerror = (err) => console.error(`WebSocket 오류: ${err}`);
+
       return () => {
-        clearInterval(loadProductListInterval);
+        if (wsCart.current) wsCart.current.close();
+        // clearInterval(loadProductListInterval);
         clearInterval(focusInterval);
       } // 클린업
     }
   }, [isStart]);
+
   const sendBarcode = async (barcodeId) => {
     try {
       const response = await fetch(
@@ -248,7 +278,13 @@ const Cart = () => {
           </p>
         </div>
       )}
-      {isStart && (
+      {(isStart && isWaiting) && (
+        <div>
+          <p>결제 대기 중 입니다.</p>
+          <p>계산대로 이동해 주세요.</p>
+        </div>
+      )}
+      {(isStart && !isWaiting) && (
         <div>
           <p>바코드를 스캔하세요.</p>
         <input

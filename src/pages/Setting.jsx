@@ -5,12 +5,13 @@ const Setting = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const SERVER_IP = "192.168.67.240";
+
   // 상품 목록을 가져오는 함수
   const fetchProducts = async () => {
     try {
       const response = await fetch(
-        "http://192.168.170.240:8080/api/cart/productList"
-        // "http://192.168.0.3:8080/api/cart/productList"
+        `http://${SERVER_IP}:8080/api/cart/productList`
         ,
         {
           method: "GET",
@@ -36,8 +37,7 @@ const Setting = () => {
   const handleSetting = async () => {
     try {
       const res = await fetch(
-        "http://192.168.170.240:8080/api/setting/"
-        // "http://192.168.0.3:8080/api/setting/"
+        `http://${SERVER_IP}:8080/api/setting/`
         , {
         method: "POST",
         headers: {

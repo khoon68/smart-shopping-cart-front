@@ -9,10 +9,12 @@ const PaymentDesk = () => {
     const [loading, setLoading] = useState(true);
     const wsPayment = useRef(null);
 
+    const SERVER_IP = "192.168.67.240";
+
     const payCartItemList = async (orderId) => {
         try {
             const response = await fetch(
-                `http://192.168.170.240:8080/api/paymentDesk/payment/${orderId}`
+                `http://${SERVER_IP}:8080/api/paymentDesk/payment/${orderId}`
                 ,
                 {
                     method: "GET",
@@ -40,7 +42,7 @@ const PaymentDesk = () => {
     const stopSensor = async () => {
         try {
             const response = await fetch(
-                `http://192.168.170.240:8080/api/paymentDesk/stop-sensor`
+                `http:/${SERVER_IP}:8080/api/paymentDesk/stop-sensor`
                 ,
                 {
                     method: "GET",
@@ -63,7 +65,7 @@ const PaymentDesk = () => {
     }
 
     useEffect(() => {
-        wsPayment.current = new WebSocket(`ws://192.168.170.240:8080/ws/shopping?clientId=CLIENT_PAYMENTDESK`);
+        wsPayment.current = new WebSocket(`ws://${SERVER_IP}:8080/ws/shopping?clientId=CLIENT_PAYMENTDESK`);
 
         wsPayment.current.onopen = () => console.log("WebSocket 연결 성공");
         wsPayment.current.onmessage = (e) => {

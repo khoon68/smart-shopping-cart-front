@@ -11,6 +11,8 @@ const Cart = () => {
   const inputRef = useRef(null); // input 요소 참조
   const wsCart = useRef(null);
 
+  const SERVER_IP = "192.168.67.240";
+
   const resetCart = () => {
     setBarcode("");
     setCartItemList([]);
@@ -18,6 +20,7 @@ const Cart = () => {
     setProduct({});
     setProductList([]);
     setIsWaiting(false);
+    setIsStart(false);
   };
 
   const getItemMaxQuantity = (itemId) => {
@@ -91,10 +94,7 @@ const Cart = () => {
     console.log(cartData);
     try {
       const res = await fetch(
-        "http://192.168.170.240:8080/api/cart/purchase"
-        // "http://192.168.0.3:8080/api/cart/purchase"
-        
-        , {
+        `http://${SERVER_IP}:8080/api/cart/purchase`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,10 +121,7 @@ const Cart = () => {
   const loadProductList = async () => {
     try {
       const response = await fetch(
-        `http://192.168.170.240:8080/api/cart/productList`
-        // `http://192.168.0.3:8080/api/cart/productList`
-        ,
-        {
+        `http://${SERVER_IP}:8080/api/cart/productList`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -211,7 +208,7 @@ const Cart = () => {
       // const loadProductListInterval = setInterval(loadProductList, 3000 * 1000);
       const focusInterval = setInterval(maintainFocus, 100); // 주기적으로 확인
 
-      wsCart.current = new WebSocket(`ws://192.168.170.240:8080/ws/shopping?clientId=CLIENT_CART`);
+      wsCart.current = new WebSocket(`ws://${SERVER_IP}:8080/ws/shopping?clientId=CLIENT_CART`);
       wsCart.current.onopen = () => console.log("WebSocket 연결 성공");
       wsCart.current.onmessage = (e) => {
         const message = JSON.parse(e.data);
@@ -233,31 +230,12 @@ const Cart = () => {
   }, [isStart]);
 
   const sendBarcode = async (barcodeId) => {
-    try {
-      const response = await fetch(
-        `http://192.168.170.240:8080/api/cart/product/${barcodeId}`
-        // `http://192.168.0.3:8080/api/cart/product/${barcodeId}`
-        ,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setCartItem(data.data);
-        console.log("바코드 전송 성공:", data.data);
-      } else {
-        alert(`바코드 전송 실패: ${response.statusText}`);
-        console.error("바코드 전송 실패:", response.statusText);
-      }
-    } catch (error) {
-      alert(`에러 발생: ${error}`);
-      console.error("에러 발생:", error);
+    const product = productList.find((product) => product.barcode === barcodeId);
+    if (Object.keys(product).length === 0) {
+      alert("등록되지 않은 바코드 입니다.");
+      return;
     }
+    setCartItem(product);
   };
 
   
@@ -292,7 +270,7 @@ const Cart = () => {
           type="text"
           value={barcode}
           onChange={(e) => setBarcode(e.target.value)}
-          style={{ opacity: 0, position: "absolute" }} // 사용자에게 숨김
+          style={{ opacity: 100, position: "absolute" }} // 사용자에게 숨김
         />
         <ul>
           {cartItemList.map((cartItem) => (

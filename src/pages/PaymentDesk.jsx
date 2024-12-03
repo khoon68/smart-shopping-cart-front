@@ -29,6 +29,7 @@ const PaymentDesk = () => {
                 const completedMessage = JSON.stringify({status: "completed"});
                 wsPayment.current.send(completedMessage);
                 await stopSensor();
+                window.location.reload();
             } else {
                 alert("결제 시도 중 실패!");
                 console.log("결제 시도 중 실패!");
@@ -42,7 +43,7 @@ const PaymentDesk = () => {
     const stopSensor = async () => {
         try {
             const response = await fetch(
-                `http:/${SERVER_IP}:8080/api/paymentDesk/stop-sensor`
+                `http://${SERVER_IP}:8080/api/paymentDesk/stop-sensor`
                 ,
                 {
                     method: "GET",

@@ -214,7 +214,7 @@ const Cart = () => {
         const message = JSON.parse(e.data);
         if (message.status === "completed") {
           alert("결제가 완료되었습니다.");
-          resetCart();
+          window.location.reload();
         }
       };
 
@@ -270,7 +270,7 @@ const Cart = () => {
           type="text"
           value={barcode}
           onChange={(e) => setBarcode(e.target.value)}
-          style={{ opacity: 100, position: "absolute" }} // 사용자에게 숨김
+          style={{ opacity: 0, position: "absolute" }} // 사용자에게 숨김
         />
         <ul>
           {cartItemList.map((cartItem) => (

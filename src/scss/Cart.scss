@@ -1,0 +1,259 @@
+.cart-container {
+    width: 800px;
+    height: 480px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .start-section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .top-text-container {
+            width: 400px;
+            display: flex;
+            justify-content: flex-start;
+            .top-text {
+                font-size: 55px;
+                font-weight: 1000;
+                letter-spacing: -5px;
+                word-spacing: -5px;
+            }
+        }
+
+        .bottom-text-container {
+            width: 400px;
+            display: flex;
+
+            .bottom-left-text-container {
+                background: linear-gradient(to right, lightgray, black);
+                border-radius: 13px;
+                .bottom-left-text {
+                    margin: 15px;
+                    color: white;
+                    font-size: 50px;
+                    font-weight: 1000;
+                    letter-spacing: -5px;
+                }
+            }
+            .bottom-right-text-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding-left: 5px;
+                span {
+                    font-size: 25px;
+                    font-weight: 550;
+                    letter-spacing: -3px;
+                }
+            }
+        }
+    }
+
+    .scan-section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+
+        
+
+        .guide-section {
+            width: 250px;
+            padding: 20px;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            .guide-text-container {
+                display: flex;
+                flex-direction: column;
+                span {
+                    font-size: 25px;
+                    font-weight: bolder;
+                }
+            }
+            
+            .product-list-modal-button {
+                width: 70%;
+                margin-top: 50px;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 999em;
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+
+        .control-section {
+            width: 550px;
+            padding: 15px;
+            display: grid;
+            grid-template-rows: 4fr 1fr 1fr;
+
+            .cart-item-list {
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+
+                .cart-item {
+                    display: grid;
+                    grid-template-columns: 3fr 1fr 1fr 2fr 1fr;
+                    gap: 10px;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                    align-items: center;
+                    justify-content: center;
+
+                    span {
+                        justify-self: start;
+                    }
+
+                    .cart-item-button-container {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    button {
+                        background-color: transparent;
+                        outline-color: none;
+                    }
+                }
+            }
+
+            .summary-container {
+                width: 100%;
+                padding-top: 10px;
+                border-top: 1px solid black;
+                .summary {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+
+            .payment-button-container {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                font-weight: bold;
+
+                button {
+                    width: 47%;
+                    border-radius: 999em;
+                    font-size: 20px;
+                }
+
+                .payment-button {
+                    background: black;
+                    color: white;
+                }
+
+                .cancel-button {
+                    border: 1px solid #ccc;
+                }
+            }
+        }
+    }
+}
+
+.customOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 옅은 검은색 배경 */
+    display: flex;
+    justify-content: center;
+    /* 가로 가운데 정렬 */
+    align-items: center;
+    /* 세로 가운데 정렬 */
+}
+
+.customModal {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    background: white;
+    /* 모달 내부 배경색 */
+    border-radius: 8px;
+    /* 모서리를 약간 둥글게 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* 약간의 그림자 효과 */
+    padding: 20px;
+    /* 내부 여백 */
+    outline: none;
+    /* 기본 outline 제거 */
+
+    .modal-container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+
+        .product-name-list-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: columns;
+            border-right: solid 1px gray;
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                align-items: center;
+
+                li {
+                    margin-bottom: 10px;
+                
+                }
+
+                li:focus {
+                        box-shadow: 0px 2px 8px 0px rgba(60, 64, 67, 0.25);;
+                    }
+            }
+        }
+
+        .product-info-container {
+            padding-left: 20px;
+            .product-info {
+                display: flex;
+                flex-direction: column;
+
+                .dummy-image {
+                    width: 125px;
+                    height: 125px;
+                    background-color: #f2f2f2;
+                }
+
+                .product-name {
+                    font-weight: 16px;
+                    font-size: bolder;
+                }
+
+                .product-info-field-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .product-info-value {
+                    justify-self: end;
+                }
+            }
+        }
+    }
+}

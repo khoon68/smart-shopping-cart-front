@@ -13,7 +13,7 @@ const Cart = () => {
     const inputRef = useRef(null);
     const wsCart = useRef(null);
 
-    const SERVER_IP = '192.168.67.240';
+    const SERVER_IP = '192.168.252.240';
 
     const getItemMaxQuantity = (itemId) => {
         const result = productList.find((product) => product.id === itemId);

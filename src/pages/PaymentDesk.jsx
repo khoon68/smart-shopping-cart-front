@@ -128,7 +128,12 @@ const PaymentDesk = () => {
                             </span>
                         </div>
                         <div>
-                            <button onClick={() => payCartItemList(paymentReceipt.orderId)}>확인</button>
+                            <button
+                                className='receipt-confirm-button'
+                                onClick={() => payCartItemList(paymentReceipt.orderId)}
+                            >
+                                확인
+                            </button>
                         </div>
                     </div>
                 )}

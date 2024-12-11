@@ -295,7 +295,7 @@ const Cart = () => {
                         value={barcode}
                         onChange={(e) => setBarcode(e.target.value)}
                         style={{
-                            opacity: 100,
+                            opacity: 0,
                             position: 'absolute',
                         }}
                     />
